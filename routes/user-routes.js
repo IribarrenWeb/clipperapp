@@ -5,15 +5,14 @@ const { store, remove, index, update, show, showByUsername, toFollow, search } =
 const { protected } = require("../middleware/auth-middleware");
 const adminProtected = require("../middleware/admin-middleware");
 
-router.use(protected); // todas las rutas estan protegidas
 
-router.get("/search", search);
-router.get("/", adminProtected, index);
+router.get("/search", protected, search);
+router.get("/", protected, adminProtected, index);
 router.get("/by-username/:username", showByUsername);
-router.get("/:id", show);
-router.post("/", store);
-router.delete("/:id", adminProtected, remove);
-router.put("/:id", update);
-router.put("/follow/:id", toFollow);
+router.get("/:id", protected, show);
+router.post("/", store); // ruta desprotegida para permitir el registro de nuevos usuarios
+router.delete("/:id", protected, adminProtected, remove);
+router.put("/:id", protected, update);
+router.put("/follow/:id", protected, toFollow);
 
 module.exports = router;
